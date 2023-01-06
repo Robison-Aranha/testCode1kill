@@ -25,6 +25,8 @@ def acharCompativeis(valor, lista):
 
 while True:
     
+    lado = -1
+    
     contador = count
     
     operaveis = []
@@ -35,6 +37,8 @@ while True:
     
     listaCandidatos = []
     
+    soma = 0
+    
     for i in operaveis:
         
         countOperaveis[i] = []
@@ -42,13 +46,19 @@ while True:
         acharCompativeis(i, countOperaveis[i])
         
         if len(countOperaveis[i]) > 0:
-            
+            soma += len(countOperaveis[i])
             countOperaveis[len(countOperaveis[i])] = i
             listaCandidatos.append(len(countOperaveis[i]))
         
     listaCandidatos.sort()
     
-    if 
+    lado = -1 if soma > 0 else 0
+    
+    BigArray.insert(lado, countOperaveis[listaCandidatos[0]])
+    
+    if len(BigArray) == num:
+        break
+    
     
     
             
