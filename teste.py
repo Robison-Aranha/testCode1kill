@@ -1,61 +1,117 @@
 from math import sqrt,trunc
 
-num = 23
+num = 40
 
 BigObject = {} 
-BigArray = [num]
 
 count = trunc(sqrt(num + (num - 1)))
 
-numero = num
+BigArray = [(count - 1) ** 2 - num, num, count ** 2 - num]
+BigObject[(count - 1) ** 2 - num] = (count - 1) ** 2 - num
+BigObject[count ** 2 - num] = count ** 2 - num
+BigObject[num] = num
+
+lado = True
+
+verificador = True
+
+numero = BigArray[-1]
 
 def acharCompativeis(valor, lista):
     
-    for c in range(count, 0, -1):
+    for c in range(count, 1, -1):
         
-        resultado = ((c ** 2) - valor) 
+        global verificador
         
-        resultado = resultado * -1 if resultado < 0 else resultado
-        
-        if resultado <= num and BigObject[resultado] == None:
-        
-            lista.append(resultado)
-            BigObject[resultado] = resultado
+        if (c ** 2) > valor:
+            
+            resultado = ((c ** 2) - valor) 
+            
+            resultado = resultado * -1 if resultado <= 0 else resultado
+            
+            
+            if resultado <= num and resultado not in BigObject and resultado != numero:
+                    
+                
+                if valor == numero:
+            
+                    if numero == BigArray[0] and sqrt(resultado + BigArray[-1]) % 1 == 0 or numero == BigArray[-1] and sqrt(resultado + BigArray[0]) % 1 == 0:
+
+                        verificador = True if verificador == False else False
+                        
+                        
+                if verificador:    
+                    
+                    lista.append(resultado)
+                
+                    
+                
+
+                
+                
+
 
 
 while True:
-    
-    lado = -1
-    
-    contador = count
     
     operaveis = []
     
     countOperaveis = {}
     
     acharCompativeis(numero, operaveis)
-    
+
     listaCandidatos = []
     
     soma = 0
     
-    for i in operaveis:
+    if len(operaveis) > 0:
         
-        countOperaveis[i] = []
+        for i in operaveis:
+            
+            countOperaveis[i] = []
+            
+            acharCompativeis(i, countOperaveis[i])
+            
+            size = len(countOperaveis[i])
+
+            soma += size
+            countOperaveis[i] = size
+                
+
+        escolhido = [*countOperaveis.values()]
+        escolhido.sort()
         
-        acharCompativeis(i, countOperaveis[i])
+        print(countOperaveis)
         
-        if len(countOperaveis[i]) > 0:
-            soma += len(countOperaveis[i])
-            countOperaveis[len(countOperaveis[i])] = i
-            listaCandidatos.append(len(countOperaveis[i]))
+        escolhido = [objeto for objeto in countOperaveis.keys() if countOperaveis[objeto] == escolhido[0]][0]
         
-    listaCandidatos.sort()
-    
-    lado = -1 if soma > 0 else 0
-    
-    BigArray.insert(lado, countOperaveis[listaCandidatos[0]])
-    
+        BigArray.append(escolhido) if lado else BigArray.insert(0, escolhido)
+        BigObject[escolhido] = operaveis
+        
+        print(BigArray)
+        
+        if soma == 0 and numero == BigArray[-2]:
+            numero = BigArray[0]
+            lado = True
+            
+        elif soma == 0 and numero == BigArray[1]:
+            numero = BigArray[-1]
+            lado = False
+            
+            
+        if soma != 0 and BigArray[-1] > BigArray[0]:
+            numero = BigArray[-1]
+            lado = True 
+        elif soma != 0 and BigArray[0] > BigArray[-1]:
+            numero = BigArray[0]
+            lado = False
+        
+    else:
+        
+        lado = True if lado == False else False
+        numero = BigArray[-1] if lado == True else BigArray[0]
+        
+        
     if len(BigArray) == num:
         break
     
