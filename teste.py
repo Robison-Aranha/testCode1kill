@@ -1,27 +1,25 @@
 from math import sqrt,trunc
 
-num = 40
+num = 38
 
 BigObject = {} 
 
 count = trunc(sqrt(num + (num - 1)))
 
-BigArray = [(count - 1) ** 2 - num, num, count ** 2 - num]
-BigObject[(count - 1) ** 2 - num] = (count - 1) ** 2 - num
+BigArray = [num, count ** 2 - num]
+
 BigObject[count ** 2 - num] = count ** 2 - num
 BigObject[num] = num
 
 lado = True
 
-verificador = True
-
 numero = BigArray[-1]
 
 def acharCompativeis(valor, lista):
     
+    verificador = True
+    
     for c in range(count, 1, -1):
-        
-        global verificador
         
         if (c ** 2) > valor:
             
@@ -30,29 +28,23 @@ def acharCompativeis(valor, lista):
             resultado = resultado * -1 if resultado <= 0 else resultado
             
             
-            if resultado <= num and resultado not in BigObject and resultado != numero:
+            if resultado <= num and resultado not in BigObject and valor != resultado:
                     
-                
-                if valor == numero:
             
-                    if numero == BigArray[0] and sqrt(resultado + BigArray[-1]) % 1 == 0 or numero == BigArray[-1] and sqrt(resultado + BigArray[0]) % 1 == 0:
+                if numero == BigArray[0] and sqrt(resultado + BigArray[-1]) % 1 == 0 or numero == BigArray[-1] and sqrt(resultado + BigArray[0]) % 1 == 0:
 
-                        verificador = True if verificador == False else False
+                    verificador = False
                         
-                        
-                if verificador:    
-                    
-                    lista.append(resultado)
                 
-                    
+                lista.append(resultado)
                 
-
-                
-                
-
-
+    
+    return verificador
+        
 
 while True:
+    
+    golDeOuro = False
     
     operaveis = []
     
@@ -70,12 +62,24 @@ while True:
             
             countOperaveis[i] = []
             
-            acharCompativeis(i, countOperaveis[i])
+            pares = acharCompativeis(i, countOperaveis[i])
             
             size = len(countOperaveis[i])
+            
+            listaContra = []
+            
+            numContra = acharCompativeis(BigArray[-1] if numero == BigArray[0] else BigArray[0], listaContra)
+            
+            sizeContra = len(listaContra)
+            
+            if sizeContra == 0 and size != 0 or pares and siz pares == False and size >= 1 or golDeOuro:
 
-            soma += size
-            countOperaveis[i] = size
+                soma += size
+                countOperaveis[i] = size
+            
+            else:
+                
+                del countOperaveis[i]
                 
 
         escolhido = [*countOperaveis.values()]
@@ -92,19 +96,23 @@ while True:
         
         if soma == 0 and numero == BigArray[-2]:
             numero = BigArray[0]
-            lado = True
+            lado = False
+            golDeOuro = True
             
         elif soma == 0 and numero == BigArray[1]:
             numero = BigArray[-1]
-            lado = False
+            lado = True
+            golDeOuro = True
             
             
         if soma != 0 and BigArray[-1] > BigArray[0]:
             numero = BigArray[-1]
             lado = True 
+            golDeOuro = False
         elif soma != 0 and BigArray[0] > BigArray[-1]:
             numero = BigArray[0]
             lado = False
+            golDeOuro = False
         
     else:
         
