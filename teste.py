@@ -1,6 +1,6 @@
 from math import sqrt,trunc
 
-num = 38
+num = 23
 
 BigObject = {} 
 
@@ -17,7 +17,7 @@ numero = BigArray[-1]
 
 def acharCompativeis(valor, lista):
     
-    verificador = True
+    verificador = 0
     
     for c in range(count, 1, -1):
         
@@ -33,18 +33,23 @@ def acharCompativeis(valor, lista):
             
                 if numero == BigArray[0] and sqrt(resultado + BigArray[-1]) % 1 == 0 or numero == BigArray[-1] and sqrt(resultado + BigArray[0]) % 1 == 0:
 
-                    verificador = False
+                    verificador = 1
                         
                 
                 lista.append(resultado)
                 
+
+    sizeLista = len(lista)
+
+    if sizeLista == 0:
+        
+        verificador = 2
+        
     
     return verificador
         
 
 while True:
-    
-    golDeOuro = False
     
     operaveis = []
     
@@ -58,6 +63,14 @@ while True:
     
     if len(operaveis) > 0:
         
+        numeroContra = BigArray[-1] if numero == BigArray[0] else BigArray[0]
+        listaContra = []
+        paresContra = acharCompativeis(numeroContra, listaContra)
+        
+        sizeContra = len(listaContra)
+
+        sizeBigArray = len(BigArray)
+        
         for i in operaveis:
             
             countOperaveis[i] = []
@@ -65,54 +78,59 @@ while True:
             pares = acharCompativeis(i, countOperaveis[i])
             
             size = len(countOperaveis[i])
+        
             
-            listaContra = []
             
-            numContra = acharCompativeis(BigArray[-1] if numero == BigArray[0] else BigArray[0], listaContra)
-            
-            sizeContra = len(listaContra)
-            
-            if sizeContra == 0 and size != 0 or pares and siz pares == False and size >= 1 or golDeOuro:
+            soma += size
+            countOperaveis[i] = size
 
-                soma += size
-                countOperaveis[i] = size
+         
             
-            else:
-                
-                del countOperaveis[i]
-                
-
         escolhido = [*countOperaveis.values()]
         escolhido.sort()
         
         print(countOperaveis)
         
-        escolhido = [objeto for objeto in countOperaveis.keys() if countOperaveis[objeto] == escolhido[0]][0]
+        try :
+            escolhido = [objeto for objeto in countOperaveis.keys() if countOperaveis[objeto] == escolhido[0]][0]
+        except:
+            print(False)
         
         BigArray.append(escolhido) if lado else BigArray.insert(0, escolhido)
         BigObject[escolhido] = operaveis
         
         print(BigArray)
         
+        listaDireita = []
+        parDireita = acharCompativeis(BigArray[-1], listaDireita)
+        sizeDireita = len(listaDireita)
+        
+        listaEsquerda = []
+        parEsquerda = acharCompativeis(BigArray[0], listaEsquerda)
+        sizeEsquerda = len(listaEsquerda)
+        
+        
         if soma == 0 and numero == BigArray[-2]:
             numero = BigArray[0]
-            lado = False
-            golDeOuro = True
+          
             
         elif soma == 0 and numero == BigArray[1]:
             numero = BigArray[-1]
-            lado = True
-            golDeOuro = True
             
+         
             
-        if soma != 0 and BigArray[-1] > BigArray[0]:
+        if soma != 0 and sizeDireita < sizeEsquerda or BigArray[-1] > BigArray[0]:
+            
             numero = BigArray[-1]
-            lado = True 
-            golDeOuro = False
-        elif soma != 0 and BigArray[0] > BigArray[-1]:
+           
+
+        elif soma != 0 and sizeEsquerda < sizeDireita or BigArray[0] > BigArray[-1]:
+            
             numero = BigArray[0]
-            lado = False
-            golDeOuro = False
+        
+         
+        
+        lado = True if numero == BigArray[-1] else False
         
     else:
         
