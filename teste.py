@@ -1,6 +1,6 @@
 from math import sqrt,trunc
 
-num = 37
+num = 40
 
 BigObject = {} 
 
@@ -19,10 +19,6 @@ contador = 0
 
 def acharCompativeis(valor, lista):
     
-    verificador = 0
-    
-    listaExcluidos = []
-    
     for c in range(count, 1, -1):
         
         if (c ** 2) > valor:
@@ -34,37 +30,12 @@ def acharCompativeis(valor, lista):
             
             if resultado <= num and resultado not in BigObject and valor != resultado:
                     
-            
-                if numero == BigArray[0] and sqrt(resultado + BigArray[-1]) % 1 == 0 or numero == BigArray[-1] and sqrt(resultado + BigArray[0]) % 1 == 0:
-
-                    verificador = 1
                     
                     
                 lista.append(resultado)
                         
-                
-                if verificador == 1:
-                    
-                    listaExcluidos.append(lista[-1])
-                    lista.pop()
-                
-                    
-                verificador = 0
-                
-
-    sizeLista = len(lista)
-
-    if sizeLista == 0 and len(listaExcluidos) > 0:
+            
         
-        lista += listaExcluidos
-        
-        
-    elif sizeLista == 0:
-        
-        verificador = 2
-        
-    
-    return verificador
 
 
 def retornarEscolhidos(valor):
@@ -79,9 +50,7 @@ def retornarEscolhidos(valor):
     
     numeroContra = BigArray[-1] if numero == BigArray[0] else BigArray[0]
     listaContra = []
-    paresContra = acharCompativeis(numeroContra, listaContra)
-
-    sizeBigArray = len(BigArray)
+    acharCompativeis(numeroContra, listaContra)
     
     acharCompativeis(valor, operaveis)
     
@@ -95,19 +64,14 @@ def retornarEscolhidos(valor):
             
             countOperaveis[i] = []
             
-            pares = acharCompativeis(i, countOperaveis[i])
+            acharCompativeis(i, countOperaveis[i])
             
             size = len(countOperaveis[i])
             
-            if pares == 0 or pares == 2 and paresContra != 2 or sizeBigArray == num - 1:
+            soma += size
+            countOperaveis[i] = size
                 
-                soma += size
-                countOperaveis[i] = size
-                
-            else:
-                
-                del countOperaveis[i]
-
+           
         escolhido = [*countOperaveis.values()]
         escolhido.sort()
         
@@ -141,24 +105,26 @@ while True:
         
         proximos = {}
         
+        print(f"Numero: {numero}")
+        print("escolhidos: ", escolhido)
+        
         for c in escolhido:
             
             retornoProximos = retornarEscolhidos(c)
             
-            proximos[len(retornoProximos["escolhidos"]) if retornoProximos != None else 0] = c
+            print(f"{c} escolhidos(s): {retornoProximos['escolhidos'] if retornoProximos != None else 'None'}")
             
-            escolhido = proximos[max(proximos.keys())] 
+            if proximos.get(len(retornoProximos["escolhidos"]) if retornoProximos != None else 0) == None:
             
-        
+                proximos[len(retornoProximos["escolhidos"]) if retornoProximos != None else 0] = c
+            
+        escolhido = proximos[min(proximos.keys())] 
+            
         soma = retorno["soma"]
-            
             
         BigArray.append(escolhido) if lado else BigArray.insert(0, escolhido)
         
-        
         BigObject[escolhido] = escolhido
-        
-        
         
         print(BigArray)
         
