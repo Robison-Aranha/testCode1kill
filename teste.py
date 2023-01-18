@@ -1,6 +1,6 @@
 from math import sqrt,trunc
 
-num = 38
+num = 37
 
 BigObject = {} 
 
@@ -17,7 +17,7 @@ numero = BigArray[-1]
 
 contador = 0
 
-def acharCompativeis(valor, lista, sizeContra):
+def acharCompativeis(valor, lista):
     
     verificador = 0
     
@@ -43,12 +43,10 @@ def acharCompativeis(valor, lista, sizeContra):
                 lista.append(resultado)
                         
                 
-                if sizeContra and sizeContra == 1:
-                
-                    if verificador == 1:
-                        
-                        listaExcluidos.append(lista[-1])
-                        lista.pop()
+                if verificador == 1:
+                    
+                    listaExcluidos.append(lista[-1])
+                    lista.pop()
                 
                     
                 verificador = 0
@@ -67,9 +65,13 @@ def acharCompativeis(valor, lista, sizeContra):
         
     
     return verificador
-        
 
-while True:
+
+def retornarEscolhidos(valor):
+    
+    global numero
+    global lado
+    global contador
     
     operaveis = []
     
@@ -77,15 +79,11 @@ while True:
     
     numeroContra = BigArray[-1] if numero == BigArray[0] else BigArray[0]
     listaContra = []
-    paresContra = acharCompativeis(numeroContra, listaContra, None)
-    
-    sizeContra = len(listaContra)
+    paresContra = acharCompativeis(numeroContra, listaContra)
 
     sizeBigArray = len(BigArray)
     
-    acharCompativeis(numero, operaveis, sizeContra)
-
-    listaCandidatos = []
+    acharCompativeis(valor, operaveis)
     
     soma = 0
     
@@ -97,7 +95,7 @@ while True:
             
             countOperaveis[i] = []
             
-            pares = acharCompativeis(i, countOperaveis[i], None)
+            pares = acharCompativeis(i, countOperaveis[i])
             
             size = len(countOperaveis[i])
             
@@ -113,24 +111,63 @@ while True:
         escolhido = [*countOperaveis.values()]
         escolhido.sort()
         
-        
         escolhido = [objeto for objeto in countOperaveis.keys() if countOperaveis[objeto] == escolhido[0]]
         
-        escolhido = min(escolhido)
         
+        return {"escolhidos": escolhido, "soma": soma}
+    
+    
+    
         
+
+while True:
+
+    retorno = retornarEscolhidos(numero)
+    
+    if retorno == None:
+        
+        lado = True if lado == False else False
+        numero = BigArray[-1] if lado == True else BigArray[0]
+    
+        if contador == 2:
+            
+            print(False)
+            exit()
+        
+        contador += 1
+    
+    else:
+        escolhido = retorno["escolhidos"]
+        
+        proximos = {}
+        
+        for c in escolhido:
+            
+            retornoProximos = retornarEscolhidos(c)
+            
+            proximos[len(retornoProximos["escolhidos"]) if retornoProximos != None else 0] = c
+            
+            escolhido = proximos[max(proximos.keys())] 
+            
+        
+        soma = retorno["soma"]
+            
+            
         BigArray.append(escolhido) if lado else BigArray.insert(0, escolhido)
-        BigObject[escolhido] = operaveis
         
-        print(escolhido)
+        
+        BigObject[escolhido] = escolhido
+        
+        
+        
         print(BigArray)
         
         listaDireita = []
-        parDireita = acharCompativeis(BigArray[-1], listaDireita, None)
+        parDireita = acharCompativeis(BigArray[-1], listaDireita)
         sizeDireita = len(listaDireita)
         
         listaEsquerda = []
-        parEsquerda = acharCompativeis(BigArray[0], listaEsquerda, None)
+        parEsquerda = acharCompativeis(BigArray[0], listaEsquerda)
         sizeEsquerda = len(listaEsquerda)
         
         
@@ -160,23 +197,11 @@ while True:
             elif sizeEsquerda < sizeDireita:
                 numero = BigArray[0]
         
-         
+        
         
         lado = True if numero == BigArray[-1] else False
-        
-    else:
-        
-        lado = True if lado == False else False
-        numero = BigArray[-1] if lado == True else BigArray[0]
-        
-        if contador == 2:
-            
-            print(False)
-            exit()
-            
-        contador += 1
-        
-        
+    
+    
     if len(BigArray) == num:
         print(BigArray)
         break
