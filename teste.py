@@ -1,6 +1,6 @@
 from math import sqrt,trunc
 
-num = 40
+num = 39
 
 BigObject = {} 
 
@@ -114,11 +114,11 @@ while True:
             
             print(f"{c} escolhidos(s): {retornoProximos['escolhidos'] if retornoProximos != None else 'None'}")
             
-            if proximos.get(len(retornoProximos["escolhidos"]) if retornoProximos != None else 0) == None:
             
-                proximos[len(retornoProximos["escolhidos"]) if retornoProximos != None else 0] = c
             
-        escolhido = proximos[min(proximos.keys())] 
+            proximos[len(retornoProximos["escolhidos"]) if retornoProximos != None else 0] = c
+            
+        escolhido = proximos[max(proximos.keys())] 
             
         soma = retorno["soma"]
             
