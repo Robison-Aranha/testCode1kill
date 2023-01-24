@@ -1,6 +1,8 @@
 from math import sqrt,trunc
 
-num = 39
+
+num = 23
+
 
 BigObject = {} 
 
@@ -27,15 +29,16 @@ def acharCompativeis(valor, lista):
             
             resultado = resultado * -1 if resultado <= 0 else resultado
             
+            valorContra = BigArray[-1] if numero == BigArray[0] else BigArray[0]
             
-            if resultado <= num and resultado not in BigObject and valor != resultado:
+            if resultado <= num and valor != resultado:
+                
+                if resultado not in BigObject or valor != numero and resultado == valorContra:
                     
-                    
-                    
-                lista.append(resultado)
+                    lista.append(resultado)
                         
             
-        
+            
 
 
 def retornarEscolhidos(valor):
@@ -51,6 +54,7 @@ def retornarEscolhidos(valor):
     numeroContra = BigArray[-1] if numero == BigArray[0] else BigArray[0]
     listaContra = []
     acharCompativeis(numeroContra, listaContra)
+    
     
     acharCompativeis(valor, operaveis)
     
@@ -70,10 +74,12 @@ def retornarEscolhidos(valor):
             
             soma += size
             countOperaveis[i] = size
+            
                 
            
         escolhido = [*countOperaveis.values()]
         escolhido.sort()
+        
         
         escolhido = [objeto for objeto in countOperaveis.keys() if countOperaveis[objeto] == escolhido[0]]
         
@@ -103,23 +109,12 @@ while True:
     else:
         escolhido = retorno["escolhidos"]
         
-        proximos = {}
-        
         print(f"Numero: {numero}")
         print("escolhidos: ", escolhido)
         
-        for c in escolhido:
+        escolhido = min(escolhido)
             
-            retornoProximos = retornarEscolhidos(c)
-            
-            print(f"{c} escolhidos(s): {retornoProximos['escolhidos'] if retornoProximos != None else 'None'}")
-            
-            
-            
-            proximos[len(retornoProximos["escolhidos"]) if retornoProximos != None else 0] = c
-            
-        escolhido = proximos[max(proximos.keys())] 
-            
+                
         soma = retorno["soma"]
             
         BigArray.append(escolhido) if lado else BigArray.insert(0, escolhido)
@@ -156,11 +151,11 @@ while True:
                 numero = BigArray[0]
             
         else:
-            if sizeDireita < sizeEsquerda:
+            if BigArray[-1] > BigArray[0]:
                 numero = BigArray[-1]
             
 
-            elif sizeEsquerda < sizeDireita:
+            elif BigArray[0] > BigArray[-1]:
                 numero = BigArray[0]
         
         
