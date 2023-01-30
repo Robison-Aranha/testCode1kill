@@ -10,7 +10,7 @@ count = trunc(sqrt(num + (num - 1)))
 
 BigArray = [num, count ** 2 - num]
 
-BigObject[count ** 2 - num] = count ** 2 - num
+BigObject[count ** 2 - num] = count ** 2 - num 
 BigObject[num] = num
 
 lado = True
@@ -19,7 +19,11 @@ numero = BigArray[-1]
 
 contador = 0
 
-def acharCompativeis(valor, lista):
+def acharCompativeis(valor, lista, listaExecao):
+    
+    if listaExecao == None:
+        
+        listaExecao = []
     
     for c in range(count, 1, -1):
         
@@ -31,17 +35,17 @@ def acharCompativeis(valor, lista):
             
             valorContra = BigArray[-1] if numero == BigArray[0] else BigArray[0]
             
-            if resultado <= num and valor != resultado:
+            if resultado <= num and valor != resultado and resultado not in listaExecao:
                 
                 if resultado not in BigObject or valor != numero and resultado == valorContra:
                     
                     lista.append(resultado)
                         
-            
+                        
             
 
 
-def retornarEscolhidos(valor):
+def retornarEscolhidos(valor, listaExecao):
     
     global numero
     global lado
@@ -53,10 +57,12 @@ def retornarEscolhidos(valor):
     
     numeroContra = BigArray[-1] if numero == BigArray[0] else BigArray[0]
     listaContra = []
-    acharCompativeis(numeroContra, listaContra)
     
     
-    acharCompativeis(valor, operaveis)
+    acharCompativeis(numeroContra, listaContra, None)
+    
+    
+    acharCompativeis(valor, operaveis, listaExecao)
     
     soma = 0
     
@@ -66,9 +72,10 @@ def retornarEscolhidos(valor):
         
         for i in operaveis:
             
+            
             countOperaveis[i] = []
             
-            acharCompativeis(i, countOperaveis[i])
+            acharCompativeis(i, countOperaveis[i], None)
             
             size = len(countOperaveis[i])
             
@@ -86,13 +93,14 @@ def retornarEscolhidos(valor):
         
         return {"escolhidos": escolhido, "soma": soma}
     
-    
-    
+
         
+
+            
 
 while True:
 
-    retorno = retornarEscolhidos(numero)
+    retorno = retornarEscolhidos(numero, [])
     
     if retorno == None:
         
@@ -107,14 +115,62 @@ while True:
         contador += 1
     
     else:
+        
         escolhido = retorno["escolhidos"]
         
         print(f"Numero: {numero}")
         print("escolhidos: ", escolhido)
         
-        escolhido = min(escolhido)
+        
+        dictProximos = {}
+        
+        if len(escolhido) > 1:
             
+            for c in escolhido:
                 
+                while True:
+                    
+                    retornoProximo = retornarEscolhidos(c, escolhido)
+                    
+                    
+                    if retornoProximo == None or len(retornoProximo["escolhidos"]) > 1:
+                        
+                        key = c
+                        
+                        while 1 == 1:
+                            
+                            try:
+                            
+                                key = dictProximos[key]
+                            
+                            except:
+                                
+                                escolhido = key
+                                break
+                        
+                        break
+                        
+                    else:
+                        
+                        
+                        for i in retornoProximo["escolhidos"]:
+                            
+                            dictProximos[i] = c
+                        
+                        escolhido += retornoProximo["escolhidos"]
+                        break
+                    
+                    
+                if type(escolhido) is not list:
+                    break
+                        
+                        
+        else:
+            
+            escolhido = escolhido[0]
+                
+      
+        
         soma = retorno["soma"]
             
         BigArray.append(escolhido) if lado else BigArray.insert(0, escolhido)
@@ -124,11 +180,11 @@ while True:
         print(BigArray)
         
         listaDireita = []
-        parDireita = acharCompativeis(BigArray[-1], listaDireita)
+        parDireita = acharCompativeis(BigArray[-1], listaDireita, None)
         sizeDireita = len(listaDireita)
         
         listaEsquerda = []
-        parEsquerda = acharCompativeis(BigArray[0], listaEsquerda)
+        parEsquerda = acharCompativeis(BigArray[0], listaEsquerda, None)
         sizeEsquerda = len(listaEsquerda)
         
         
@@ -151,11 +207,12 @@ while True:
                 numero = BigArray[0]
             
         else:
-            if BigArray[-1] > BigArray[0]:
+            
+            if sizeEsquerda > sizeDireita:
                 numero = BigArray[-1]
             
 
-            elif BigArray[0] > BigArray[-1]:
+            elif sizeDireita > sizeEsquerda:
                 numero = BigArray[0]
         
         
