@@ -1,6 +1,6 @@
 from math import sqrt,trunc
 
-num = 15
+num = 52
 
 BigObject = {} 
 DispoObject = {}
@@ -19,8 +19,6 @@ numero = BigArray[-1]
 contador = 0
 
 def acharCompativeis(valor, lista):
-    
-
     
     for c in range(count, 1, -1):
         
@@ -84,10 +82,6 @@ def retornarEscolhidos(valor):
         return {"escolhidos": escolhido, "soma": soma}
     
 
-        
-
-            
-
 while True:
 
     retorno = retornarEscolhidos(numero)
@@ -106,34 +100,31 @@ while True:
     
     else:
         
-        escolhido = retorno["escolhidos"]
+        contador = 0
+        
+        escolhido = retorno["escolhidos"]  
         
         print(f"Numero: {numero}")
         print("escolhidos: ", escolhido)
         
         dictProximos = {}
-        arrayProximos = []
+        
         
         for c in escolhido:
             
             proximos = retornarEscolhidos(c)
             
             dictProximos[c] = len(proximos["escolhidos"]) if proximos != None else 0
-            
-            
-        
+             
         escolhido = [*dictProximos.values()]
         escolhido.sort()
-        escolhido = [objeto for objeto in dictProximos.keys() if dictProximos[objeto] == escolhido[0]][0]           
+        escolhido = [objeto for objeto in dictProximos.keys() if dictProximos[objeto] == escolhido[0]][0]
         
-                
         soma = retorno["soma"]
             
         BigArray.append(escolhido) if lado else BigArray.insert(0, escolhido)
         
         BigObject[escolhido] = escolhido
-        
-        print(BigArray)
         
         listaDireita = []
         parDireita = acharCompativeis(BigArray[-1], listaDireita)
@@ -143,7 +134,10 @@ while True:
         parEsquerda = acharCompativeis(BigArray[0], listaEsquerda)
         sizeEsquerda = len(listaEsquerda)
         
+        print(f"sizeDireita: {sizeDireita}")
+        print(f"sizeEsquerda: {sizeEsquerda}")
         
+        print(BigArray)
         
         if soma == 0:
             if numero == BigArray[-2]:
@@ -152,7 +146,7 @@ while True:
                 
             elif numero == BigArray[1]:
                 numero = BigArray[-1]
-        
+                
         elif sizeDireita == sizeEsquerda:
             
             if numero == BigArray[-2]:
@@ -161,6 +155,7 @@ while True:
                 
             elif numero == BigArray[1]:
                 numero = BigArray[0]
+            
             
         else:
             
