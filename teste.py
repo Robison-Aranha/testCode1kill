@@ -1,6 +1,6 @@
 from math import sqrt,trunc
 
-num = 52
+num = 40
 
 BigObject = {} 
 DispoObject = {}
@@ -18,7 +18,7 @@ numero = BigArray[-1]
 
 contador = 0
 
-def acharCompativeis(valor, lista):
+def acharCompativeis(valor, lista, verificador):
     
     for c in range(count, 1, -1):
         
@@ -32,12 +32,87 @@ def acharCompativeis(valor, lista):
             
             if resultado <= num and valor != resultado:
                 
-                if resultado not in BigObject or valor != numero and resultado == valorContra:
+                if resultado not in BigObject or verificador != None and resultado == valorContra:
                     
                     lista.append(resultado)
                         
-                        
+
+def acharEscolhido(lista):
+    
+    keymap = {}
+    menorValor = -1
+    
+    for i in lista:
+        
+        retorno = retornarEscolhidos(i)
+        
+        if retorno != None:
             
+            keymap[i] = retorno["escolhidos"]
+            
+            for h in retorno["escolhidos"]:
+                
+                listaEscolhido = []
+                acharCompativeis(h, listaEscolhido, True)
+                
+                size = len(listaEscolhido)
+                keymap[h] = size
+                
+                if menorValor == -1:
+                    
+                    menorValor = size
+                    
+                elif size < menorValor:
+                    
+                    menorValor = size
+                    
+        else:
+            
+            return i
+                
+    
+    listaMenor = []
+    
+    for c in lista:
+        
+        listaMenor += keymap[c]
+        
+    
+    if listaMenor.count(menorValor) == 1:
+        
+        for i in lista:
+            
+            if menorValor in keymap[i]:
+                
+                return i
+    
+    else:
+        
+        menorValor = -1
+        
+        for i in lista:
+            
+            soma = 0
+            
+            for c in keymap[i]:
+                
+                soma += keymap[c]
+                
+            if menorValor == -1:
+                    
+                menorValor = soma
+                    
+            elif soma < menorValor:
+                
+                menorValor = soma
+
+            keymap[i] = soma
+    
+        for i in lista:
+        
+            if menorValor == keymap[i]:
+                
+                return i   
 
 
 def retornarEscolhidos(valor):
@@ -50,7 +125,7 @@ def retornarEscolhidos(valor):
     
     countOperaveis = {}
     
-    acharCompativeis(valor, operaveis)
+    acharCompativeis(valor, operaveis, None)
     
     soma = 0
     
@@ -63,7 +138,7 @@ def retornarEscolhidos(valor):
             
             countOperaveis[i] = []
             
-            acharCompativeis(i, countOperaveis[i])
+            acharCompativeis(i, countOperaveis[i], True)
             
             size = len(countOperaveis[i])
             
@@ -107,18 +182,13 @@ while True:
         print(f"Numero: {numero}")
         print("escolhidos: ", escolhido)
         
-        dictProximos = {}
-        
-        
-        for c in escolhido:
+        if len(escolhido) > 1:
             
-            proximos = retornarEscolhidos(c)
+            escolhido = acharEscolhido(escolhido)
+        
+        else:
             
-            dictProximos[c] = len(proximos["escolhidos"]) if proximos != None else 0
-             
-        escolhido = [*dictProximos.values()]
-        escolhido.sort()
-        escolhido = [objeto for objeto in dictProximos.keys() if dictProximos[objeto] == escolhido[0]][0]
+            escolhido = escolhido[0]
         
         soma = retorno["soma"]
             
@@ -127,11 +197,11 @@ while True:
         BigObject[escolhido] = escolhido
         
         listaDireita = []
-        parDireita = acharCompativeis(BigArray[-1], listaDireita)
+        parDireita = acharCompativeis(BigArray[-1], listaDireita, None)
         sizeDireita = len(listaDireita)
         
         listaEsquerda = []
-        parEsquerda = acharCompativeis(BigArray[0], listaEsquerda)
+        parEsquerda = acharCompativeis(BigArray[0], listaEsquerda, None)
         sizeEsquerda = len(listaEsquerda)
         
         print(f"sizeDireita: {sizeDireita}")
@@ -149,14 +219,8 @@ while True:
                 
         elif sizeDireita == sizeEsquerda:
             
-            if numero == BigArray[-2]:
-                numero = BigArray[-1]
-            
-                
-            elif numero == BigArray[1]:
-                numero = BigArray[0]
-            
-            
+            numero = acharEscolhido([BigArray[0], BigArray[-1]])
+        
         else:
             
             if sizeEsquerda > sizeDireita:
