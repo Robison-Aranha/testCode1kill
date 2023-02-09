@@ -18,6 +18,8 @@ numero = BigArray[-1]
 
 contador = 0
 
+arrayResrtrito = []
+
 def acharCompativeis(valor, lista, verificador):
     
     for c in range(count, 1, -1):
@@ -30,7 +32,7 @@ def acharCompativeis(valor, lista, verificador):
             
             valorContra = BigArray[-1] if numero == BigArray[0] else BigArray[0]
             
-            if resultado <= num and valor != resultado:
+            if resultado <= num and valor != resultado and resultado not in arrayResrtrito:
                 
                 if resultado not in BigObject or verificador != None and resultado == valorContra:
                     
@@ -41,6 +43,10 @@ def acharEscolhido(lista):
     
     keymap = {}
     menorValor = -1
+    
+    global arrayResrtrito
+    
+    arrayResrtrito = lista[:]
     
     for i in lista:
         
@@ -75,44 +81,23 @@ def acharEscolhido(lista):
     
     for c in lista:
         
-        listaMenor += keymap[c]
+        lista2 = []
         
-    
-    if listaMenor.count(menorValor) == 1:
-        
-        for i in lista:
+        for i in keymap[c]:
             
-            if menorValor in keymap[i]:
+            lista2.append(keymap[i])
+            
+        listaMenor.append(min(lista2))
+            
+        
+        
+    for i in lista:
+        
+        for h in keymap[i]:
+            
+            if menorValor == keymap[h]:
                 
                 return i
-    
-    else:
-        
-        menorValor = -1
-        
-        for i in lista:
-            
-            soma = 0
-            
-            for c in keymap[i]:
-                
-                soma += keymap[c]
-                
-            if menorValor == -1:
-                    
-                menorValor = soma
-                    
-            elif soma < menorValor:
-                
-                menorValor = soma
-
-            keymap[i] = soma
-    
-        for i in lista:
-        
-            if menorValor == keymap[i]:
-                
-                return i   
 
 
 def retornarEscolhidos(valor):
@@ -185,6 +170,8 @@ while True:
         if len(escolhido) > 1:
             
             escolhido = acharEscolhido(escolhido)
+            
+            arrayResrtrito = []
         
         else:
             
@@ -220,6 +207,8 @@ while True:
         elif sizeDireita == sizeEsquerda:
             
             numero = acharEscolhido([BigArray[0], BigArray[-1]])
+            
+            arrayResrtrito = []
         
         else:
             
