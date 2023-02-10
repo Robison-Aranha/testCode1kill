@@ -42,18 +42,19 @@ def acharCompativeis(valor, lista, verificador):
 def acharEscolhido(lista):
     
     keymap = {}
+    dictValores = {}
     menorValor = -1
     
     global arrayResrtrito
     
-    arrayResrtrito = lista[:]
+    while True:
     
-    for i in lista:
+        arrayResrtrito += lista[:]
         
-        retorno = retornarEscolhidos(i)
-        
-        if retorno != None:
+        for i in lista:
             
+            retorno = retornarEscolhidos(i)
+                
             keymap[i] = retorno["escolhidos"]
             
             for h in retorno["escolhidos"]:
@@ -63,6 +64,7 @@ def acharEscolhido(lista):
                 
                 size = len(listaEscolhido)
                 keymap[h] = size
+                dictValores[h] = i
                 
                 if menorValor == -1:
                     
@@ -71,33 +73,50 @@ def acharEscolhido(lista):
                 elif size < menorValor:
                     
                     menorValor = size
+                        
+            
                     
-        else:
+        
+        listaMenor = []
+        
+        for c in lista:
             
-            return i
+            lista2 = []
+            
+            for i in keymap[c]:
                 
-    
-    listaMenor = []
-    
-    for c in lista:
-        
-        lista2 = []
-        
-        for i in keymap[c]:
-            
-            lista2.append(keymap[i])
-            
-        listaMenor.append(min(lista2))
-            
-        
-        
-    for i in lista:
-        
-        for h in keymap[i]:
-            
-            if menorValor == keymap[h]:
+                lista2.append(keymap[i])
                 
-                return i
+            listaMenor.append(min(lista2))
+                
+        
+        listaNova = []
+            
+        for i in lista:
+            
+            for h in keymap[i]:
+                
+                if menorValor == keymap[h]:
+                    
+                    if listaMenor.count(menorValor) == 1:  
+                        
+                        key = h
+                        
+                        try:
+                            
+                            key = dictValores[key]
+                            
+                        except:
+                            
+                            return key
+                            
+                    
+                    listaNova.append(h)
+                    
+        
+        lista = listaNova[:]
+            
+            
 
 
 def retornarEscolhidos(valor):
