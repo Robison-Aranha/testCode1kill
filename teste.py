@@ -43,13 +43,12 @@ def acharEscolhido(lista):
     
     keymap = {}
     dictValores = {}
+    dictNumerosUsados = {}
     menorValor = -1
     
     global arrayResrtrito
     
     while True:
-    
-        arrayResrtrito += lista[:]
         
         for i in lista:
             
@@ -59,13 +58,28 @@ def acharEscolhido(lista):
             
             for h in retorno["escolhidos"]:
                 
+                dictValores[h] = i
+                
+                arrayResrtrito = []
+                
+                while True:
+                    
+                    try:
+                        
+                        arrayResrtrito.append(dictValores[h])
+                        
+                    except:
+                        
+                        break
+                    
+                
+                
                 listaEscolhido = []
                 acharCompativeis(h, listaEscolhido, True)
                 
                 size = len(listaEscolhido)
                 keymap[h] = size
-                dictValores[h] = i
-                
+    
                 if menorValor == -1:
                     
                     menorValor = size
