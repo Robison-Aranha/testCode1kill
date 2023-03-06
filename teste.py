@@ -39,104 +39,6 @@ def acharCompativeis(valor, lista, verificador):
                     lista.append(resultado)
 
 
-def acharEscolhido(lista):
-
-    arraysRestritos = {}
-    valoresSelecionados = {}
-    dictList = {}
-
-    for c in lista:
-
-        dictList[f"{c}{c}"] = c
-        arraysRestritos[c] = [c]
-        valoresSelecionados[c] = c
-
-    global arrayResrtrito
-
-    while True:
-
-        keymap = {}
-        menorValor = -1
-
-        for i in dictList.keys():
-            
-            valor = dictList[i]
-
-            arrayResrtrito = arraysRestritos[valoresSelecionados[valor]][:]
-            
-            retorno = retornarEscolhidos(valor)
-
-            if retorno != None:
-
-                keymap[valor] = retorno["escolhidos"]
-
-                for h in retorno["escolhidos"]:
-
-                    listaEscolhido = []
-                    acharCompativeis(h, listaEscolhido, True)
-
-                    size = len(listaEscolhido)
-                    
-                    keymap[h] = size
-
-                    if menorValor == -1:
-
-                        menorValor = size
-
-                    elif size < menorValor:
-
-                        menorValor = size
-
-            else:
-
-                return valoresSelecionados[valor]
-
-
-
-        listaMenor = []
-
-        for c in dictList.keys():
-            
-            valor = dictList[c]
-
-            lista2 = []
-
-            for i in keymap[valor]:
-
-                lista2.append(keymap[i])
-
-            listaMenor.append(min(lista2))
-
-
-        DictNova = {}
-
-
-        for i in dictList.keys():
-            
-            valor = dictList[i]
-
-            for h in keymap[valor]:
-
-                if menorValor == keymap[h]:
-
-                    if listaMenor.count(menorValor) == 1:
-
-                       return valoresSelecionados[valor]
-                   
-                    DictNova[f"{valoresSelecionados[valor]}{h}"] = h
-                    arraysRestritos[valoresSelecionados[valor]].append(h)
-                    valoresSelecionados[h] = valoresSelecionados[valor]
-                    
-                    
-            del valoresSelecionados[valor]
-
-
-        dictList = DictNova.copy()
-
-
-
-
-
 def retornarEscolhidos(valor):
 
     global numero
@@ -177,7 +79,45 @@ def retornarEscolhidos(valor):
 
 
         return {"escolhidos": escolhido, "soma": soma}
+    
+    
 
+def acharEscolhido(valores):
+    
+    listaAnalisados = []
+    dictValores = {}
+    
+    for c in valores:
+    
+        retorno = retornarEscolhidos(c)
+        
+        try:
+        
+            listaAnalisados += retorno["proximos"]
+            
+            for i in retorno["proximos"]:
+                
+                dictValores[i] = c
+            
+        except:
+            pass
+        
+    
+    listaEscolhidos = []
+    
+    for c in listaAnalisados:
+        
+        lista = []
+        acharCompativeis(c, lista, True)
+        
+        if lista > 0:
+            
+            listaEscolhidos.append(c)   
+            
+    
+    return dictValores[listaEscolhidos[0]]    
+        
+    
 
 while True:
 
@@ -207,9 +147,7 @@ while True:
         if len(escolhido) > 1:
 
             escolhido = acharEscolhido(escolhido)
-
-            arrayResrtrito = []
-
+           
         else:
 
             escolhido = escolhido[0]
@@ -243,9 +181,7 @@ while True:
 
         elif sizeDireita == sizeEsquerda:
 
-            numero = acharEscolhido([BigArray[0], BigArray[-1]])
-
-            arrayResrtrito = []
+            
 
         else:
 
