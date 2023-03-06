@@ -110,7 +110,8 @@ def acharEscolhido(valores):
         lista = []
         acharCompativeis(c, lista, True)
         
-        if lista > 0:
+        if len(lista)
+ > 0:
             
             listaEscolhidos.append(c)   
             
